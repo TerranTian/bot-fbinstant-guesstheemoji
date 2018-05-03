@@ -179,6 +179,7 @@ function callSendAPI(messageData) {
 };
 
 function addPlayerToCollection(senderID, playerID){
+    
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
     if(collection){
         var query = {sender_id: senderID};
@@ -199,6 +200,9 @@ function addPlayerToCollection(senderID, playerID){
             }
         }); 
     }
+
+    sendMessage(senderID, null, "I'm Maiko! I'll notify you when have news! Have a nice day!" , "Play Now", null);
+
 };
 
 function checkAndSendMessageForAllPlayers(){
