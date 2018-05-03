@@ -11,6 +11,8 @@ const
     mongo = require('mongodb'),
     request = require('request'), 
     express = require('express'),
+    https = require("https"),
+    fs = require("fs");
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json());
 
@@ -29,8 +31,14 @@ MongoClient.connect(MONGODB_URL, function(err, client) {
         console.error(err);     
 });
 
+const sslOptions = {
+    key: fs.readFileSync('yolostudio_xyz.cer'),
+    cert: fs.readFileSync('yolostudio_xyz.crt'),
+    ca : fs.readFileSync('yolostudio_xyz.ca-bundle')
+  };
+
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1337, () => console.log('Webhook is listening...'));
+https.createServer(options, app).listen(process.env.PORT || 1337, () => console.log('Webhook is listening...'));
 
 // Creates the endpoint for our webhook 
 app.post('/webhook', (req, res) => {  
