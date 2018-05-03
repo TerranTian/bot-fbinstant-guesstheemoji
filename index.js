@@ -24,8 +24,8 @@ MongoClient.connect(MONGODB_URL, function(err, client) {
         MongoDB = client.db(DB_NAME);
 
         //Run checking every 1 hours
-        //setInterval(checkAndSendMessageForAllPlayers, 3600000);
-        setInterval(checkAndSendMessageForAllPlayers, 60000);
+        setInterval(checkAndSendMessageForAllPlayers, 3600000);
+        //setInterval(checkAndSendMessageForAllPlayers, 60000);
     }
     else
         console.error(err);     
@@ -171,10 +171,10 @@ function callSendAPI(messageData) {
         json: true,  
         body: messageData
     }, function (error, response, body){
-        if(error)
-            console.error('Send FB Graph API failed ', 'error', error, 'status code', response.statusCode, 'body', body);
-        else
-            console.log('Send FB Graph API successed!');
+        // if(error)
+        //     console.error('Send FB Graph API failed ', 'error', error, 'status code', response.statusCode, 'body', body);
+        // else
+        //     console.log('Send FB Graph API successed!');
     });
 };
 
@@ -188,8 +188,10 @@ function addPlayerToCollection(senderID, playerID){
                 if(result.length == 0){
                     var player = { sender_id: senderID, player_id: playerID, last_datetime_send_push: moment() };
                     collection.insertOne(player, function(err, res) {
-                        if (!err)
-                            console.log('Added player: ' + senderID);
+                        if (!err){
+                            console.log('Added sender id: ' + senderID);
+                            sendMessage(senderID, null, "I'm Maiko! I'll notify you when have news! Have a nice day!" , "PLAY NOW", null);
+                        }                           
                         else
                             console.error(err);
                     });
@@ -200,8 +202,6 @@ function addPlayerToCollection(senderID, playerID){
             }
         }); 
     }
-
-    sendMessage(senderID, null, "I'm Maiko! I'll notify you when have news! Have a nice day!" , "Play Now", null);
 
 };
 
@@ -215,8 +215,8 @@ function checkAndSendMessageForAllPlayers(){
                 for(let i = 0; i < result.length; i++){
                     var diff = curDateTime.diff(moment(result[i].last_datetime_send_push), 'minute');
                     //>= 1 day
-                    //if((diff + 1) >= 1440){
-                    if((diff + 1) >= 2){
+                    if((diff + 1) >= 1440){
+                    //if((diff + 1) >= 2){
                         //console.log('->Sent message to sender id: ' + result[i].sender_id);
                         sendMessage(result[i].sender_id, null, "We miss you!" , "Play now!", null);
 
