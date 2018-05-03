@@ -32,7 +32,7 @@ MongoClient.connect(MONGODB_URL, function(err, client) {
 });
 
 const sslOptions = {
-    key: fs.readFileSync('yolostudio_xyz.p7b'),
+    key: fs.readFileSync('yolostudio_xyz.cer'),
     cert: fs.readFileSync('yolostudio_xyz.crt'),
     ca : fs.readFileSync('yolostudio_xyz.ca-bundle')
   };
