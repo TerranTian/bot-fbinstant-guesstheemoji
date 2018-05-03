@@ -12,7 +12,7 @@ const
     request = require('request'), 
     express = require('express'),
     https = require("https"),
-    fs = require("fs");
+    fs = require("fs"),
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json());
 
