@@ -22,11 +22,9 @@ MongoClient.connect(MONGODB_URL, function(err, client) {
         console.log("Connected MongoDB success!");
         MongoDB = client.db(DB_NAME);
 
-        //Run checking every 59 minutes
-        schedule.scheduleJob('*/59 * * * *', function(){
-            checkAndSendMessageForAllPlayers();
-        });
-
+        //Run checking every 1 hours
+        //setInterval(checkAndSendMessageForAllPlayers, 3600000);
+        setInterval(checkAndSendMessageForAllPlayers, 60000);
     }
     else
         console.error(err);     
@@ -206,7 +204,8 @@ function checkAndSendMessageForAllPlayers(){
                 for(let i = 0; i < result.length; i++){
                     var diff = curDateTime.diff(moment(result[i].last_datetime_send_push), 'minute');
                     //>= 1 day
-                    if((diff + 1) >= 1440){
+                    //if((diff + 1) >= 1440){
+                    if((diff + 1) >= 2){
                         //console.log('->Sent message to sender id: ' + result[i].sender_id);
                         sendMessage(result[i].sender_id, null, "We miss you!" , "Play now!", null);
 
