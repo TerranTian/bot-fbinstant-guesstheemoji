@@ -1,9 +1,9 @@
 'use strict';
 
 const VERIFY_TOKEN = 'EAABfV8cX80ABANlSq8pRDMYNC9h9ljPI2djRBSlaqiM7RYcaeorPBICdF0nhOAg8cQvgEB53TIMZAu6YJ9kcBgxW7RHl9gGx63Yf4SxiAhD65V0G6O4uZCoLeLMhUuRDVDLKTRE83uBjX7n7she6dTT1LZCE628xU6OkemAZBQZDZD';
-//const MONGODB_URL = 'mongodb://localhost:27017/';
-const MONGODB_URL = 'mongodb://frogdevstudio:Llcl1992%40%40@ds111430.mlab.com:11430/bot-fbinstant';
-const DB_NAME = 'bot-fbinstant';
+const MONGODB_URL = 'mongodb://localhost:27017/';
+//const MONGODB_URL = 'mongodb://frogdevstudio:Llcl1992%40%40@ds111430.mlab.com:11430/bot-fbinstant';
+const DB_NAME = 'botDB';
 const PLAYERS_COLLECTION_NAME = 'playersCollection';
 
 const
