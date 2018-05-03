@@ -38,7 +38,7 @@ const sslOptions = {
   };
 
 // Sets server port and logs message on success
-https.createServer(options, app).listen(process.env.PORT || 1337, () => console.log('Webhook is listening...'));
+https.createServer(sslOptions, app).listen(process.env.PORT || 1337, () => console.log('Webhook is listening...'));
 
 // Creates the endpoint for our webhook 
 app.post('/webhook', (req, res) => {  
