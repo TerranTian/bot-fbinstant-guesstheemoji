@@ -100,23 +100,25 @@ function onReceivedGameplay(event){
     // FBInstant context ID 
     var contextId = event.game_play.context_id;
 
-    // Check for payload
-    if (event.game_play.payload) {
-        // The variable payload here contains data set by
-        // FBInstant.setSessionData()
-        //
-        var payload = JSON.parse(event.game_play.payload);
+    if(MongoDB){
+        addPlayerToCollection(senderId, playerId);
+    }
 
-        // In this example, the bot is just "echoing" the message received
-        // immediately. In your game, you'll want to delay the bot messages
-        // to remind the user to play 1, 3, 7 days after game play, for example.
-        sendMessage(senderId, null, "Message to game client: '" + payload.message + "'", "Play now!", payload);
-    }
-    else{
-        if(MongoDB){
-            addPlayerToCollection(senderId, playerId);
-        }
-    }
+    // // Check for payload
+    // if (event.game_play.payload) {
+    //     // The variable payload here contains data set by
+    //     // FBInstant.setSessionData()
+    //     //
+    //     var payload = JSON.parse(event.game_play.payload);
+
+    //     // In this example, the bot is just "echoing" the message received
+    //     // immediately. In your game, you'll want to delay the bot messages
+    //     // to remind the user to play 1, 3, 7 days after game play, for example.
+    //     sendMessage(senderId, null, "Message to game client: '" + payload.message + "'", "Play now!", payload);
+    // }
+    // else{
+       
+    // }
 };
 
 // Send bot message
@@ -127,21 +129,23 @@ function onReceivedGameplay(event){
 // cta (string): Button text
 // payload (object): Custom data that will be sent to game session
 // 
-function sendMessage(sender, context, message, cta, payload) {
+function sendMessage(senderID, contextID, title, message, urlImg, cta, payload) {
     var button = {
         type: "game_play",
         title: cta
     };
 
-    if (context) {
-        button.context = context;
+    if (contextID) {
+        button.context = contextID;
     }
+
     if (payload) {
         button.payload = JSON.stringify(payload)
     }
+
     var messageData = {
         recipient: {
-            id: sender
+            id: senderID
         },
         message: {
             attachment: {
@@ -150,7 +154,9 @@ function sendMessage(sender, context, message, cta, payload) {
                     template_type: "generic",
                     elements: [
                     {
-                        title: message,
+                        title: title,
+                        subtitle: message,
+                        url: urlImg,
                         buttons: [button]
                     }
                     ]
@@ -161,6 +167,16 @@ function sendMessage(sender, context, message, cta, payload) {
 
     callSendAPI(messageData);
 
+};
+
+function sendMessageWithCoinBonus(senderID, contextID){
+    var valueBonusCoin = 50;
+    var title = 'Limited Time Free Coins!';
+    var message = 'Enter game to get ' + valueBonusCoin + ' free coins! Only limit 1 hour...';
+    var urlImg = 'https://image.ibb.co/dxr2Tn/1200_627.png'
+    var cta = 'Claim & Play Now!';
+
+    this.sendMessage(senderID, contextID, title, message, urlImg, cta, { event: 'claim_coins' });
 };
 
 function callSendAPI(messageData) {
@@ -190,7 +206,7 @@ function addPlayerToCollection(senderID, playerID){
                     collection.insertOne(player, function(err, res) {
                         if (!err){
                             console.log('Added sender id: ' + senderID);
-                            sendMessage(senderID, null, "I'm Maiko! I'll notify you when have news! Have a nice day!" , "PLAY NOW", null);
+                            sendMessage(senderID, null, "We're Yolo Studio! We'll notify you when have rewards or new updates! Have a nice day!" , "Play Now", null);
                         }                           
                         else
                             console.error(err);
@@ -198,6 +214,7 @@ function addPlayerToCollection(senderID, playerID){
                 }
                 else{
                     console.log('Player already in database!');
+                    sendMessageWithCoinBonus(senderID, null);
                 }
             }
         }); 
@@ -218,7 +235,7 @@ function checkAndSendMessageForAllPlayers(){
                     if((diff + 1) >= 1440){
                     //if((diff + 1) >= 2){
                         //console.log('->Sent message to sender id: ' + result[i].sender_id);
-                        sendMessage(result[i].sender_id, null, "We miss you!" , "Play now!", null);
+                        sendMessage(result[i].sender_id, null, "We miss you!" , "Play Now", null);
 
                         collection.update({_id: result[i]._id}, {$set: {last_datetime_send_push: curDateTime}});
                     }
