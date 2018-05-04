@@ -189,7 +189,7 @@ function sendMessageReminderToPlay(senderID, contextID){
 };
 
 function sendMessageSubscribe(senderID, contextID){
-    var title = 'Hi! Nice to meet you!';
+    var title = 'Nice to meet you! 👋';
     var message = "I'm Bot! I'll notify you when have gifts or new updates! Have a nice day!";
     var urlImg = 'https://image.ibb.co/k3TAW7/1200_627_reminder.jpg'
     var cta = 'Play Now';
