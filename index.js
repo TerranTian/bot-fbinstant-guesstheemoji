@@ -156,7 +156,7 @@ function sendMessage(senderID, contextID, title, message, urlImg, cta, payload) 
                     {
                         title: title,
                         subtitle: message,
-                        url: urlImg,
+                        image_url: urlImg,
                         buttons: [button]
                     }
                     ]
