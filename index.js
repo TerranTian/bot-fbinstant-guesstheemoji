@@ -213,7 +213,7 @@ function addPlayerToCollection(senderID, playerID){
                     var player = { sender_id: senderID, player_id: playerID, last_datetime_send_push: moment() };
                     collection.insertOne(player, function(err, res) {
                         if (!err){
-                            console.log('Added sender id: ' + senderID);
+                            console.log('Added new player with sender id: ' + senderID);
                             sendMessage(senderID, null, "Welcome to Guess The Emoji 😁 I'm Bot! I'll notify you when have gifts or new updates! Have a nice day!" , "Play Now", null);
                         }                           
                         else
@@ -221,7 +221,7 @@ function addPlayerToCollection(senderID, playerID){
                     });
                 }
                 else{
-                    console.log('Player already in database!');
+                    //console.log('Player already in database!');
                 }
             }
         }); 
