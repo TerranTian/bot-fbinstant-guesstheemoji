@@ -171,12 +171,21 @@ function sendMessage(senderID, contextID, title, message, urlImg, cta, payload) 
 
 function sendMessageWithCoinBonus(senderID, contextID){
     var valueBonusCoin = 50;
-    var title = 'Limited Time Free Coins!';
-    var message = 'Enter game to get ' + valueBonusCoin + ' free coins! Only limit 1 hour...';
+    var title = 'Limited Gift!';
+    var message = 'Enter game to claim your gift - ' + valueBonusCoin + ' coins!';
     var urlImg = 'https://image.ibb.co/dZoo17/1200_627_limited_gift.jpg'
     var cta = 'Claim & Play Now';
 
     sendMessage(senderID, contextID, title, message, urlImg, cta, { event: 'claim_coins' });
+};
+
+function sendMessageReminderToPlay(senderID, contextID){
+    var title = 'We miss you!';
+    var message = 'Time to relax! Come back to play and solve some levels...';
+    var urlImg = 'https://image.ibb.co/k3TAW7/1200_627_reminder.jpg'
+    var cta = 'Play Now';
+
+    sendMessage(senderID, contextID, title, message, urlImg, cta, null);
 };
 
 function callSendAPI(messageData) {
@@ -206,15 +215,15 @@ function addPlayerToCollection(senderID, playerID){
                     collection.insertOne(player, function(err, res) {
                         if (!err){
                             console.log('Added sender id: ' + senderID);
-                            sendMessage(senderID, null, "We're Yolo Studio! We'll notify you when have rewards or new updates! Have a nice day!" , "Play Now", null);
+                            sendMessage(senderID, null, "Welcome to Guess The Emoji 😁 I'm Bot! I'll notify you when have gifts or new updates! Have a nice day!" , "Play Now", null);
                         }                           
                         else
                             console.error(err);
                     });
                 }
                 else{
+                    sendMessageReminderToPlay(result[i].sender_id, null);
                     console.log('Player already in database!');
-                    sendMessageWithCoinBonus(senderID, null);
                 }
             }
         }); 
@@ -235,7 +244,7 @@ function checkAndSendMessageForAllPlayers(){
                     if((diff + 1) >= 1440){
                     //if((diff + 1) >= 2){
                         //console.log('->Sent message to sender id: ' + result[i].sender_id);
-                        sendMessage(result[i].sender_id, null, "We miss you!" , "Play Now", null);
+                        sendMessageReminderToPlay(result[i].sender_id, null);
 
                         collection.update({_id: result[i]._id}, {$set: {last_datetime_send_push: curDateTime}});
                     }
