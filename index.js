@@ -231,7 +231,7 @@ function addPlayerToCollection(senderID, playerID){
                 }
                 else{
                     //console.log('Player already in database!');
-                    sendMessageSubscribe(senderID, null);
+                    //sendMessageSubscribe(senderID, null);
                 }
             }
         }); 
