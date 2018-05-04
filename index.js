@@ -180,8 +180,8 @@ function sendMessageWithCoinBonus(senderID, contextID){
 };
 
 function sendMessageReminderToPlay(senderID, contextID){
-    var title = 'We miss you!';
-    var message = 'Time to relax! 😁 Come back to play and solve some levels... ';
+    var title = '😍 We miss you! 😍';
+    var message = 'Time to relax!🤩 Come back to play and solve some levels...🤘';
     var urlImg = 'https://image.ibb.co/k3TAW7/1200_627_reminder.jpg'
     var cta = 'Play Now';
 
@@ -189,7 +189,7 @@ function sendMessageReminderToPlay(senderID, contextID){
 };
 
 function sendMessageSubscribe(senderID, contextID){
-    var title = 'Welcome to Guess The Emoji!';
+    var title = 'Hi! Nice to meet you!';
     var message = "I'm Bot! I'll notify you when have gifts or new updates! Have a nice day!";
     var urlImg = 'https://image.ibb.co/k3TAW7/1200_627_reminder.jpg'
     var cta = 'Play Now';
