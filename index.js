@@ -176,7 +176,7 @@ function sendMessageWithCoinBonus(senderID, contextID){
     var urlImg = 'https://image.ibb.co/dxr2Tn/1200_627.png'
     var cta = 'Claim & Play Now!';
 
-    this.sendMessage(senderID, contextID, title, message, urlImg, cta, { event: 'claim_coins' });
+    sendMessage(senderID, contextID, title, message, urlImg, cta, { event: 'claim_coins' });
 };
 
 function callSendAPI(messageData) {
