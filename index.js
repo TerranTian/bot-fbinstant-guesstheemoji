@@ -187,10 +187,10 @@ function callSendAPI(messageData) {
         json: true,  
         body: messageData
     }, function (error, response, body){
-        // if(error)
-        //     console.error('Send FB Graph API failed ', 'error', error, 'status code', response.statusCode, 'body', body);
-        // else
-        //     console.log('Send FB Graph API successed!');
+        if(error)
+            console.error('Send FB Graph API failed ', 'error', error, 'status code', response.statusCode, 'body', body);
+        else
+            console.log('Send FB Graph API successed!');
     });
 };
 
