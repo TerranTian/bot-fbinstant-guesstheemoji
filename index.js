@@ -173,8 +173,8 @@ function sendMessageWithCoinBonus(senderID, contextID){
     var valueBonusCoin = 50;
     var title = 'Limited Time Free Coins!';
     var message = 'Enter game to get ' + valueBonusCoin + ' free coins! Only limit 1 hour...';
-    var urlImg = 'https://image.ibb.co/dxr2Tn/1200_627.png'
-    var cta = 'Claim & Play Now!';
+    var urlImg = 'https://image.ibb.co/dZoo17/1200_627_limited_gift.jpg'
+    var cta = 'Claim & Play Now';
 
     sendMessage(senderID, contextID, title, message, urlImg, cta, { event: 'claim_coins' });
 };
