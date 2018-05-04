@@ -181,7 +181,7 @@ function sendMessageWithCoinBonus(senderID, contextID){
 
 function sendMessageReminderToPlay(senderID, contextID){
     var title = 'We miss you!';
-    var message = 'Time to relax! Come back to play and solve some levels...';
+    var message = 'Time to relax! 😁 Come back to play and solve some levels... ';
     var urlImg = 'https://image.ibb.co/k3TAW7/1200_627_reminder.jpg'
     var cta = 'Play Now';
 
@@ -222,6 +222,7 @@ function addPlayerToCollection(senderID, playerID){
                 }
                 else{
                     //console.log('Player already in database!');
+                    sendMessage(senderID, null, "Welcome to Guess The Emoji 😁 I'm Bot! I'll notify you when have gifts or new updates! Have a nice day!" , "Play Now", null);
                 }
             }
         }); 
