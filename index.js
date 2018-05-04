@@ -188,6 +188,15 @@ function sendMessageReminderToPlay(senderID, contextID){
     sendMessage(senderID, contextID, title, message, urlImg, cta, null);
 };
 
+function sendMessageSubscribe(senderID, contextID){
+    var title = 'Welcome to Guess The Emoji!';
+    var message = "I'm Bot! I'll notify you when have gifts or new updates! Have a nice day!";
+    var urlImg = 'https://image.ibb.co/k3TAW7/1200_627_reminder.jpg'
+    var cta = 'Play Now';
+
+    sendMessage(senderID, contextID, title, message, urlImg, cta, null);
+};
+
 function callSendAPI(messageData) {
     var graphApiUrl = 'https://graph.facebook.com/me/messages?access_token=' + VERIFY_TOKEN;
     request({
@@ -214,7 +223,7 @@ function addPlayerToCollection(senderID, playerID){
                     collection.insertOne(player, function(err, res) {
                         if (!err){
                             console.log('Added new player with sender id: ' + senderID);
-                            sendMessage(senderID, null, "Welcome to Guess The Emoji 😁 I'm Bot! I'll notify you when have gifts or new updates! Have a nice day!" , "Play Now", null);
+                            sendMessageSubscribe(senderID, null);
                         }                           
                         else
                             console.error(err);
@@ -222,7 +231,7 @@ function addPlayerToCollection(senderID, playerID){
                 }
                 else{
                     //console.log('Player already in database!');
-                    sendMessage(senderID, null, "Welcome to Guess The Emoji 😁 I'm Bot! I'll notify you when have gifts or new updates! Have a nice day!" , "Play Now", null);
+                    sendMessageSubscribe(senderID, null);
                 }
             }
         }); 
