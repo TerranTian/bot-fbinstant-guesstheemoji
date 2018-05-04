@@ -204,7 +204,6 @@ function callSendAPI(messageData) {
 };
 
 function addPlayerToCollection(senderID, playerID){
-    
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
     if(collection){
         var query = {sender_id: senderID};
@@ -222,7 +221,7 @@ function addPlayerToCollection(senderID, playerID){
                     });
                 }
                 else{
-                    sendMessageReminderToPlay(result[i].sender_id, null);
+                    sendMessageReminderToPlay(senderID, null);
                     console.log('Player already in database!');
                 }
             }
