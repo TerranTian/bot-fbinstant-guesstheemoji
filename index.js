@@ -196,10 +196,10 @@ function callSendAPI(messageData) {
         json: true,  
         body: messageData
     }, function (error, response, body){
-        if(error)
-            console.error('Send FB Graph API failed ', 'error', error, 'status code', response.statusCode, 'body', body);
-        else
-            console.log('Send FB Graph API successed!');
+        // if(error)
+        //     console.error('Send FB Graph API failed ', 'error', error, 'status code', response.statusCode, 'body', body);
+        // else
+        //     console.log('Send FB Graph API successed!');
     });
 };
 
@@ -221,7 +221,6 @@ function addPlayerToCollection(senderID, playerID){
                     });
                 }
                 else{
-                    sendMessageReminderToPlay(senderID, null);
                     console.log('Player already in database!');
                 }
             }
@@ -242,7 +241,6 @@ function checkAndSendMessageForAllPlayers(){
                     //>= 1 day
                     if((diff + 1) >= 1440){
                     //if((diff + 1) >= 2){
-                        //console.log('->Sent message to sender id: ' + result[i].sender_id);
                         sendMessageReminderToPlay(result[i].sender_id, null);
 
                         collection.update({_id: result[i]._id}, {$set: {last_datetime_send_push: curDateTime}});
