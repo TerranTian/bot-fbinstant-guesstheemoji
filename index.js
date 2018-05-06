@@ -6,6 +6,29 @@ const MONGODB_URL = 'mongodb://localhost:27017/';
 const DB_NAME = 'botDB';
 const PLAYERS_COLLECTION_NAME = 'playersCollection';
 
+var arrMessageReminders = [
+{
+    title: "😍 We miss you! 😍'",
+    message: "Time to relax! 😏 Come back to play and solve some levels...🤘"
+},
+{
+    title: "Time to relax...😍'",
+    message: "If you feel tired 😪 Let's play and solve some puzzle for relax and get fun! 🤘"
+},
+{
+    title: "Your friends waiting you...😤",
+    message: "Some your friends playing game now 🤘 Join and beat them! 😎"
+},
+{
+    title: "Do you know? 🤗'",
+    message: "More than 20% players can't reach level 100. Can you reach level 100? 😎"
+},
+{
+    title: "1400 levels waitting...😱",
+    message: "🤣 I think you can  solve all levels. Let's play now! 😎"
+},
+];
+
 const
     moment = require('moment'),
     mongo = require('mongodb'),
@@ -27,8 +50,10 @@ MongoClient.connect(MONGODB_URL, function(err, client) {
         setInterval(checkAndSendMessageForAllPlayers, 3600000);
         //setInterval(checkAndSendMessageForAllPlayers, 60000);
     }
-    else
-        console.error(err);     
+    else{
+        console.error(err);
+    }
+           
 });
 
 const sslOptions = {
@@ -180,8 +205,10 @@ function sendMessageWithCoinBonus(senderID, contextID){
 };
 
 function sendMessageReminderToPlay(senderID, contextID){
-    var title = '😍 We miss you! 😍';
-    var message = 'Time to relax!🤩 Come back to play and solve some levels...🤘';
+    var rndMessage = randomItemArray(arrMessageReminders);
+
+    var title = rndMessage.title;
+    var message = rndMessage.message;
     var urlImg = 'https://image.ibb.co/k3TAW7/1200_627_reminder.jpg'
     var cta = 'Play Now';
 
@@ -264,3 +291,9 @@ function checkAndSendMessageForAllPlayers(){
     }
 };
 
+function randomItemArray(array)
+{
+  
+return array[Math.floor(Math.random() * array.length)];
+     
+}
