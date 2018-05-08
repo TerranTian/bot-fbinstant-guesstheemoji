@@ -270,22 +270,27 @@ function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
     var count = 0;
     if(collection){
-        const cursor = collection.find();
-        // Use `next()` and `await` to exhaust the cursor
-        for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-            console.log('->sender id: ' + doc.sender_id);
+        collection.find().forEach(function(doc){
             count++;
             console.log('->count: ' + count);
-            var curDateTime = moment();
-            var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
-                    //>= 1 day
-                    if((diff + 1) >= 1440){
-                    //if((diff + 1) >= 2){
-                        sendMessageReminderToPlay(doc.sender_id, null);
+        });
 
-                        collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});
-                    }
-        }
+        // const cursor = collection.find();
+        // // Use `next()` and `await` to exhaust the cursor
+        // for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+        //     console.log('->sender id: ' + doc.sender_id);
+        //     count++;
+        //     console.log('->count: ' + count);
+        //     var curDateTime = moment();
+        //     var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
+        //             //>= 1 day
+        //             if((diff + 1) >= 1440){
+        //             //if((diff + 1) >= 2){
+        //                 sendMessageReminderToPlay(doc.sender_id, null);
+
+        //                 collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});
+        //             }
+        // }
     }
 };
 
