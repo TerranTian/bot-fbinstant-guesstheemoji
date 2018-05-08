@@ -241,38 +241,36 @@ function callSendAPI(messageData) {
 };
 
 function addPlayerToCollection(senderID, playerID){
-    var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
-    if(collection){
-        var query = {sender_id: senderID};
-        collection.find(query).toArray(function(err, result) {
-            if(!err){
-                if(result.length == 0){
-                    var player = { sender_id: senderID, player_id: playerID, last_datetime_send_push: moment() };
-                    collection.insertOne(player, function(err, res) {
-                        if (!err){
-                            console.log('Added new player with sender id: ' + senderID);
-                            sendMessageSubscribe(senderID, null);
-                        }                           
-                        else
-                            console.error(err);
-                    });
-                }
-                else{
-                    //console.log('Player already in database!');
-                    //sendMessageSubscribe(senderID, null);
-                }
-            }
-        }); 
+    // var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
+    // if(collection){
+    //     var query = {sender_id: senderID};
+    //     collection.find(query).toArray(function(err, result) {
+    //         if(!err){
+    //             if(result.length == 0){
+    //                 var player = { sender_id: senderID, player_id: playerID, last_datetime_send_push: moment() };
+    //                 collection.insertOne(player, function(err, res) {
+    //                     if (!err){
+    //                         console.log('Added new player with sender id: ' + senderID);
+    //                         sendMessageSubscribe(senderID, null);
+    //                     }                           
+    //                     else
+    //                         console.error(err);
+    //                 });
+    //             }
+    //             else{
+    //                 //console.log('Player already in database!');
+    //                 //sendMessageSubscribe(senderID, null);
+    //             }
+    //         }
+    //     }); 
     }
-
 };
 
 function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
     if(collection){
-        console.log('call checkAndSendMessageForAllPlayers');
         collection.find().toArray(function(err, result) {
-              console.log('1. Start collection.find().toArray...')
+            console.log('1. Start collection.find().toArray...')
             if(!err){
                 console.log('2. Checking and sending message! Num of players: ' + result.length);
                 var curDateTime = moment();
