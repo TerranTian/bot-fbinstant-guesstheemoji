@@ -271,8 +271,9 @@ function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
     if(collection){
         collection.find().toArray(function(err, result) {
+              console.log('1. Start collection.find().toArray...')
             if(!err){
-                console.log('Checking and sending message! Num of players: ' + result.length);
+                console.log('2. Checking and sending message! Num of players: ' + result.length);
                 var curDateTime = moment();
                 for(let i = 0; i < result.length; i++){
                     var diff = curDateTime.diff(moment(result[i].last_datetime_send_push), 'minute');
