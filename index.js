@@ -268,27 +268,25 @@ function addPlayerToCollection(senderID, playerID){
 
 function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
+    var count = 0;
     if(collection){
-        collection.find().toArray(function(err, result) {
-            console.log('1. Start collection.find().toArray...')
-            if(!err){
-                console.log('2. Checking and sending message! Num of players: ' + result.length);
-                var curDateTime = moment();
-                for(let i = 0; i < result.length; i++){
-                    var diff = curDateTime.diff(moment(result[i].last_datetime_send_push), 'minute');
+        const cursor = collection.find({});
+        while(await cursor.hasNext()) {
+          const doc = await cursor.next();
+          // process doc here
+          count++;
+
+          console.log('->count: ' + count);
+            var curDateTime = moment();
+            var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
                     //>= 1 day
                     if((diff + 1) >= 1440){
                     //if((diff + 1) >= 2){
-                        sendMessageReminderToPlay(result[i].sender_id, null);
+                        sendMessageReminderToPlay(doc.sender_id, null);
 
-                        collection.update({_id: result[i]._id}, {$set: {last_datetime_send_push: curDateTime}});
+                        collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});
                     }
-                }
-            }
-            else{
-                console.log('Send message failed! Error: ' + err);
-            }   
-        }); 
+        }
     }
 };
 
