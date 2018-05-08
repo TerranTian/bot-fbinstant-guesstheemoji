@@ -8,7 +8,7 @@ const PLAYERS_COLLECTION_NAME = 'playersCollection';
 
 var arrMessageReminders = [
 {
-    title: "😍 We miss you! 😍'",
+    title: "😍 We miss you! 😍",
     message: "Time to relax! 😏 Come back to play and solve some levels...🤘"
 },
 {
@@ -20,7 +20,7 @@ var arrMessageReminders = [
     message: "Some your friends playing game now 🤘 Join and beat them! 😎"
 },
 {
-    title: "Do you know? 🤗'",
+    title: "Do you know? 🤗",
     message: "More than 20% players can't reach level 100. Can you reach level 100? 😎"
 },
 {
@@ -48,8 +48,8 @@ MongoClient.connect(MONGODB_URL, function(err, client) {
 
         //Run checking every 1 hours
         //setInterval(checkAndSendMessageForAllPlayers, 1800000);
-        //setInterval(checkAndSendMessageForAllPlayers, 60000);
-        checkAndSendMessageForAllPlayers();
+        setInterval(checkAndSendMessageForAllPlayers, 1800000);
+        //checkAndSendMessageForAllPlayers();
     }
     else{
         console.error(err);
@@ -64,7 +64,7 @@ const sslOptions = {
   };
 
 // Sets server port and logs message on success
-https.createServer(sslOptions, app).listen(process.env.PORT || 1337, () => console.log('Webhook is listening...'));
+https.createServer(sslOptions, app).listen(process.env.PORT || 1337, () => console.log('Webhook Guess The Emoji is listening...'));
 
 // Creates the endpoint for our webhook 
 app.post('/webhook', (req, res) => {  
