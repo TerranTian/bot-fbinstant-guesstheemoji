@@ -263,7 +263,7 @@ function addPlayerToCollection(senderID, playerID){
     //             }
     //         }
     //     }); 
-    }
+    //}
 };
 
 function checkAndSendMessageForAllPlayers(){
