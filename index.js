@@ -270,6 +270,7 @@ function addPlayerToCollection(senderID, playerID){
 function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
     if(collection){
+        console.log('call checkAndSendMessageForAllPlayers');
         collection.find().toArray(function(err, result) {
               console.log('1. Start collection.find().toArray...')
             if(!err){
