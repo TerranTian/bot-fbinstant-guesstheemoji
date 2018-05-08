@@ -280,7 +280,7 @@ function checkAndSendMessageForAllPlayers(){
                     collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});
                 }                
         });
-        console.log(moment.tz(moment(), 'Asia/Ho_Chi_Minh') + '->Check and send message. Num players: ' + count);
+        console.log(moment().format('LLL') + '->Check and send message. Num players: ' + count);
     }
 };
 
