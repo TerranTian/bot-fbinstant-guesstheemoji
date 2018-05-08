@@ -241,29 +241,29 @@ function callSendAPI(messageData) {
 };
 
 function addPlayerToCollection(senderID, playerID){
-    // var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
-    // if(collection){
-    //     var query = {sender_id: senderID};
-    //     collection.find(query).toArray(function(err, result) {
-    //         if(!err){
-    //             if(result.length == 0){
-    //                 var player = { sender_id: senderID, player_id: playerID, last_datetime_send_push: moment() };
-    //                 collection.insertOne(player, function(err, res) {
-    //                     if (!err){
-    //                         console.log('Added new player with sender id: ' + senderID);
-    //                         sendMessageSubscribe(senderID, null);
-    //                     }                           
-    //                     else
-    //                         console.error(err);
-    //                 });
-    //             }
-    //             else{
-    //                 //console.log('Player already in database!');
-    //                 //sendMessageSubscribe(senderID, null);
-    //             }
-    //         }
-    //     }); 
-    //}
+    var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
+    if(collection){
+        var query = {sender_id: senderID};
+        collection.find(query).toArray(function(err, result) {
+            if(!err){
+                if(result.length == 0){
+                    var player = { sender_id: senderID, player_id: playerID, last_datetime_send_push: moment() };
+                    collection.insertOne(player, function(err, res) {
+                        if (!err){
+                            console.log("[" + moment().format('LLL') + "]" + " Added new player with sender id: " + senderID);
+                            sendMessageSubscribe(senderID, null);
+                        }                           
+                        else
+                            console.error(err);
+                    });
+                }
+                else{
+                    //console.log('Player already in database!');
+                    //sendMessageSubscribe(senderID, null);
+                }
+            }
+        }); 
+    }
 };
 
 function checkAndSendMessageForAllPlayers(){
@@ -273,6 +273,7 @@ function checkAndSendMessageForAllPlayers(){
         collection.find().forEach(function(doc){
             var curDateTime = moment();
             var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
+            count++;
             //>= 1 day
             if((diff + 1) >= 1440){
             //if((diff + 1) >= 2){
@@ -280,7 +281,7 @@ function checkAndSendMessageForAllPlayers(){
                     collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});
                 }                
         });
-        console.log(moment().format('LLL') + '->Check and send message. Num players: ' + count);
+        console.log("[" + moment().format('LLL') + "]" + " Check and send message. Num players: " + count);
     }
 };
 
