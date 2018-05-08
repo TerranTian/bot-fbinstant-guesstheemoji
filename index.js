@@ -270,13 +270,12 @@ function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
     var count = 0;
     if(collection){
-        const cursor = collection.find({});
-        while(await cursor.hasNext()) {
-          const doc = await cursor.next();
-          // process doc here
-          count++;
-
-          console.log('->count: ' + count);
+        const cursor = collection.find();
+        // Use `next()` and `await` to exhaust the cursor
+        for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+            console.log('->sender id: ' + doc.sender_id);
+            count++;
+            console.log('->count: ' + count);
             var curDateTime = moment();
             var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
                     //>= 1 day
