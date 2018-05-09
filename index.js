@@ -38,6 +38,9 @@ const
     bodyParser = require('body-parser'),
     app = express().use(bodyParser.json());
 
+
+var counterSendPush = 0;
+
 var MongoClient = mongo.MongoClient;
 var MongoDB = null;
 MongoClient.connect(MONGODB_URL, function(err, client) {
@@ -275,7 +278,6 @@ function addPlayerToCollection(senderID, playerID){
 function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
     if(collection){
-        var counter = 0;
         collection.find().forEach(function(doc){
             var curDateTime = moment();
             var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
@@ -283,10 +285,10 @@ function checkAndSendMessageForAllPlayers(){
             if((diff + 1) >= 1440){
                 sendMessageWithLimitedGift(doc.sender_id, null);
                 collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});
-                counter += 1;    
+                counterSendPush += 1;    
             }                
         });
-        console.log("[" + moment().format('LLL') + "]" + " Check and send message. Sent total: " + counter + "players!");
+        console.log("[" + moment().format('LLL') + "]" + " Check and send message. Sent total: " + counterSendPush + " players!");
     }
 };
 
