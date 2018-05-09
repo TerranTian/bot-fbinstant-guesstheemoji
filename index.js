@@ -2,7 +2,6 @@
 
 const VERIFY_TOKEN = 'EAABfV8cX80ABAAg1lQCbhTiEhZCdTZAK9M5tkxLGcZAjFOw9ZBSatQ4HdHOQvNtn90AYvtQJhdM0llQ69yPga9EIlEfDGMUBUZBqlrnfzutTn6HIAIFJ7iSo9sFpuFrRZB8sYZBZBbrz0c3DBhrPHbA3OoGQhGYN9MmZCETS6lZBVMrQZDZD';
 const MONGODB_URL = 'mongodb://localhost:27017/';
-//const MONGODB_URL = 'mongodb://frogdevstudio:Llcl1992%40%40@ds111430.mlab.com:11430/bot-fbinstant';
 const DB_NAME = 'botDB';
 const PLAYERS_COLLECTION_NAME = 'playersCollection';
 
@@ -47,7 +46,6 @@ MongoClient.connect(MONGODB_URL, function(err, client) {
         MongoDB = client.db(DB_NAME);
 
         //Run checking every 1 hours
-        //setInterval(checkAndSendMessageForAllPlayers, 1800000);
         setInterval(checkAndSendMessageForAllPlayers, 1800000);
         //checkAndSendMessageForAllPlayers();
     }
@@ -65,6 +63,7 @@ const sslOptions = {
 
 // Sets server port and logs message on success
 https.createServer(sslOptions, app).listen(process.env.PORT || 1337, () => console.log('Webhook Guess The Emoji is listening...'));
+//app.listen(process.env.PORT || 1337, () => console.log('webhook localhost is listening'));
 
 // Creates the endpoint for our webhook 
 app.post('/webhook', (req, res) => {  
@@ -111,10 +110,17 @@ app.get('/webhook', (req, res) => {
             res.sendStatus(403);      
         }
     }    
-
-
 });
 
+app.get('/limited_reward', (req, res) => {  
+    let playerID = req.query['player_id'];
+    if(isPlayerCanGetLimitedReward(playerID)){
+        res.status(200).json({errCode: 0, success: true});  
+    }
+    else{
+        res.status(200).json({errCode: -1, success: false});  
+    }
+});
 
 function onReceivedGameplay(event){
     // Page-scoped ID of the bot user
@@ -195,11 +201,11 @@ function sendMessage(senderID, contextID, title, message, urlImg, cta, payload) 
 
 };
 
-function sendMessageWithCoinBonus(senderID, contextID){
-    var valueBonusCoin = 50;
-    var title = 'Limited Gift!';
-    var message = 'Enter game to claim your gift - ' + valueBonusCoin + ' coins!';
-    var urlImg = 'https://image.ibb.co/dZoo17/1200_627_limited_gift.jpg'
+function sendMessageWithLimitedGift(senderID, contextID){
+    var valueBonusCoin = 200;
+    var title = '😱 Limited Gift 😱';
+    var message = "Don't miss it! Enter a game to claim ' + valueBonusCoin + ' coins! Only in 12 hours! 😎";
+    var urlImg = 'https://image.ibb.co/kutuZS/1200_627_limited_gift.jpg'
     var cta = 'Claim & Play Now';
 
     sendMessage(senderID, contextID, title, message, urlImg, cta, { event: 'claim_coins' });
@@ -268,26 +274,42 @@ function addPlayerToCollection(senderID, playerID){
 
 function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
-    var count = 0;
     if(collection){
+        var counter = 0;
         collection.find().forEach(function(doc){
             var curDateTime = moment();
             var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
-            count++;
-            //>= 1 day
+            //>= 12 hours
             if((diff + 1) >= 1440){
-            //if((diff + 1) >= 2){
-                    sendMessageReminderToPlay(doc.sender_id, null);
-                    collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});
-                }                
+                sendMessageWithLimitedGift(doc.sender_id, null);
+                collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});
+                counter += 1;    
+            }                
         });
-        console.log("[" + moment().format('LLL') + "]" + " Check and send message. Num players: " + count);
+        console.log("[" + moment().format('LLL') + "]" + " Check and send message. Sent total: " + counter + "players!");
     }
 };
 
-function randomItemArray(array)
-{
-  
-return array[Math.floor(Math.random() * array.length)];
-     
+function isPlayerCanGetLimitedReward(playerID){
+    var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
+    if(collection){
+        var query = {player_id: playerID};
+        collection.findOne(query, function(err, docPlayer) {
+            if(!err){
+                var curDateTime = moment();
+                var diff = curDateTime.diff(moment(docPlayer.last_datetime_send_push), 'minute');
+                if((diff + 1) <= 720){
+                    return true;
+                }
+                else
+                    return false;
+            }
+        });
+    }
+
+    return false;
+}
+
+function randomItemArray(array){
+    return array[Math.floor(Math.random() * array.length)];   
 }
