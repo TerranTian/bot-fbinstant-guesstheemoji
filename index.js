@@ -283,6 +283,7 @@ function addPlayerToCollection(senderID, playerID){
 function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
     if(collection){
+        counterSendPush = 0;
         collection.find().forEach(function(doc){
             var curDateTime = moment();
             var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
