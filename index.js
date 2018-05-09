@@ -207,7 +207,7 @@ function sendMessage(senderID, contextID, title, message, urlImg, cta, payload) 
 function sendMessageWithLimitedGift(senderID, contextID){
     var valueBonusCoin = 200;
     var title = '😱 Limited Gift 😱';
-    var message = "Don't miss it! Enter a game to claim ' + valueBonusCoin + ' coins! Only in 12 hours! 😎";
+    var message = "Don't miss it! Enter game to claim " + valueBonusCoin + " coins! Only in 12 hours! 😎";
     var urlImg = 'https://image.ibb.co/kutuZS/1200_627_limited_gift.jpg'
     var cta = 'Claim & Play Now';
 
