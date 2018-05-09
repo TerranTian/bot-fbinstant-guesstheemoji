@@ -62,8 +62,13 @@ const sslOptions = {
     key: fs.readFileSync('yolostudio_xyz.key'),
     cert: fs.readFileSync('yolostudio_xyz.crt'),
     ca: fs.readFileSync('yolostudio_xyz.ca-bundle')
-  };
+};
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 // Sets server port and logs message on success
 https.createServer(sslOptions, app).listen(process.env.PORT || 1337, () => console.log('Webhook Guess The Emoji - Port 1337 is listening...'));
 //app.listen(process.env.PORT || 1337, () => console.log('webhook localhost is listening'));
