@@ -65,7 +65,7 @@ const sslOptions = {
   };
 
 // Sets server port and logs message on success
-https.createServer(sslOptions, app).listen(process.env.PORT || 1337, () => console.log('Webhook Guess The Emoji is listening...'));
+https.createServer(sslOptions, app).listen(process.env.PORT || 1337, () => console.log('Webhook Guess The Emoji - Port 1337 is listening...'));
 //app.listen(process.env.PORT || 1337, () => console.log('webhook localhost is listening'));
 
 // Creates the endpoint for our webhook 
