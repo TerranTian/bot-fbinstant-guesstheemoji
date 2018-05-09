@@ -49,8 +49,8 @@ MongoClient.connect(MONGODB_URL, function(err, client) {
         MongoDB = client.db(DB_NAME);
 
         //Run checking every 1 hours
-        //setInterval(checkAndSendMessageForAllPlayers, 1800000);
-        checkAndSendMessageForAllPlayers();
+        setInterval(checkAndSendMessageForAllPlayers, 1800000);
+        //checkAndSendMessageForAllPlayers();
     }
     else{
         console.error(err);
