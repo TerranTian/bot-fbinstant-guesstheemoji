@@ -278,7 +278,7 @@ function addPlayerToCollection(senderID, playerID){
         collection.find(query).toArray(function(err, result) {
             if(!err){
                 if(result.length == 0){
-                    var player = { sender_id: senderID, player_id: playerID, last_datetime_send_push: moment() };
+                    var player = { sender_id: senderID, player_id: playerID, last_datetime_send_push: moment(), is_can_get_limited_gift: false };
                     collection.insertOne(player, function(err, res) {
                         if (!err){
                             console.log("[" + moment().format('LLL') + "]" + " Added new player with sender id: " + senderID);
