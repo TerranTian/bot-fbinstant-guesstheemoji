@@ -128,13 +128,15 @@ app.get('/limited_reward', (req, res) => {
             if(!err && docPlayer){
                 var curDateTime = moment();
                 var diff = curDateTime.diff(moment(docPlayer.last_datetime_send_push), 'minute');
-                console.log("isPlayerCanGetLimitedReward: " + playerID + " : " + diff);
+                //console.log("isPlayerCanGetLimitedReward: " + playerID + " : " + diff);
                 if((diff + 1) <= 720){
                     res.status(200).json({errCode: 0, success: true}); 
                 }
                 else
                     res.status(200).json({errCode: -1, success: false});  
             }
+            else
+                res.status(200).json({errCode: -1, success: false}); 
         });
     }
 });
