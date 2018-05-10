@@ -120,11 +120,22 @@ app.get('/webhook', (req, res) => {
 
 app.get('/limited_reward', (req, res) => {  
     let playerID = req.query['player_id'];
-    if(isPlayerCanGetLimitedReward(playerID)){
-        res.status(200).json({errCode: 0, success: true});  
-    }
-    else{
-        res.status(200).json({errCode: -1, success: false});  
+
+    var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
+    if(collection){
+        var query = {player_id: playerID};
+        collection.findOne(query, function(err, docPlayer) {
+            if(!err && docPlayer){
+                var curDateTime = moment();
+                var diff = curDateTime.diff(moment(docPlayer.last_datetime_send_push), 'minute');
+                console.log("isPlayerCanGetLimitedReward: " + playerID + " : " + diff);
+                if((diff + 1) <= 720){
+                    res.status(200).json({errCode: 0, success: true}); 
+                }
+                else
+                    res.status(200).json({errCode: -1, success: false});  
+            }
+        });
     }
 });
 
@@ -295,25 +306,7 @@ function checkAndSendMessageForAllPlayers(){
 };
 
 function isPlayerCanGetLimitedReward(playerID){
-    var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
-    var result = false;
-    if(collection){
-        var query = {player_id: playerID};
-        collection.findOne(query, function(err, docPlayer) {
-            if(!err && docPlayer){
-                var curDateTime = moment();
-                var diff = curDateTime.diff(moment(docPlayer.last_datetime_send_push), 'minute');
-                console.log("isPlayerCanGetLimitedReward: " + playerID + " : " + diff);
-                if((diff + 1) <= 720){
-                    result =  true;
-                }
-                else
-                    result =  false;
-            }
-        });
-    }
-
-    return result;
+    
 }
 
 function randomItemArray(array){
