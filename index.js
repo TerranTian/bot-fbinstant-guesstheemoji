@@ -290,7 +290,7 @@ function checkAndSendMessageForAllPlayers(){
                 collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});  
             }                
         });
-        console.log("[" + moment().format('LLL') + "]" + " Check and send message. Sent total: " +  collection.count() + " players!");
+        console.log("[" + moment().format('LLL') + "]" + " Check and send message to all players!");
     }
 };
 
