@@ -128,8 +128,9 @@ app.get('/limited_reward', (req, res) => {
             if(!err && docPlayer){
                 var curDateTime = moment();
                 var diff = curDateTime.diff(moment(docPlayer.last_datetime_send_push), 'minute');
-                if((diff + 1) <= 720){
+                if(((diff + 1) <= 720) && docPlayer.is_can_get_limited_gift == true){
                     res.status(200).json({errCode: 0, success: true}); 
+                    collection.update({_id: docPlayer._id}, {$set: {is_can_get_limited_gift: false}});  
                     console.log("->Request limited gift from player id " + playerID + " : Approved!");
                 }
                 else{
@@ -306,7 +307,7 @@ function checkAndSendMessageForAllPlayers(){
             //>= 12 hours
             if((diff + 1) >= 1440){
                 sendMessageWithLimitedGift(doc.sender_id, null);
-                collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});  
+                collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime, is_can_get_limited_gift: true}});  
             }                
         });
         console.log("[" + moment().format('LLL') + "]" + " Check and send message to all players!");
