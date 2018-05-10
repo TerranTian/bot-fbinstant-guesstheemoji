@@ -296,6 +296,7 @@ function checkAndSendMessageForAllPlayers(){
 
 function isPlayerCanGetLimitedReward(playerID){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
+    var result = false;
     if(collection){
         var query = {player_id: playerID};
         collection.findOne(query, function(err, docPlayer) {
@@ -304,15 +305,15 @@ function isPlayerCanGetLimitedReward(playerID){
                 var diff = curDateTime.diff(moment(docPlayer.last_datetime_send_push), 'minute');
                 console.log("isPlayerCanGetLimitedReward: " + playerID + " : " + diff);
                 if((diff + 1) <= 720){
-                    return true;
+                    result =  true;
                 }
                 else
-                    return false;
+                    result =  false;
             }
         });
     }
 
-    return false;
+    return result;
 }
 
 function randomItemArray(array){
