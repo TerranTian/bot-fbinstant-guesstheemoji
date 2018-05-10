@@ -39,8 +39,6 @@ const
     app = express().use(bodyParser.json());
 
 
-var counterSendPush = 0;
-
 var MongoClient = mongo.MongoClient;
 var MongoDB = null;
 MongoClient.connect(MONGODB_URL, function(err, client) {
@@ -283,18 +281,16 @@ function addPlayerToCollection(senderID, playerID){
 function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
     if(collection){
-        counterSendPush = 0;
         collection.find().forEach(function(doc){
             var curDateTime = moment();
             var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
             //>= 12 hours
             if((diff + 1) >= 1440){
                 sendMessageWithLimitedGift(doc.sender_id, null);
-                collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});
-                counterSendPush += 1;    
+                collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime}});  
             }                
         });
-        console.log("[" + moment().format('LLL') + "]" + " Check and send message. Sent total: " + counterSendPush + " players!");
+        console.log("[" + moment().format('LLL') + "]" + " Check and send message. Sent total: " +  collection.count() + " players!");
     }
 };
 
@@ -306,6 +302,7 @@ function isPlayerCanGetLimitedReward(playerID){
             if(!err && docPlayer){
                 var curDateTime = moment();
                 var diff = curDateTime.diff(moment(docPlayer.last_datetime_send_push), 'minute');
+                console.log("isPlayerCanGetLimitedReward: " + playerID + " : " + diff);
                 if((diff + 1) <= 720){
                     return true;
                 }
