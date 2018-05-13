@@ -148,6 +148,7 @@ app.get('/limited_reward', (req, res) => {
     }
 });
 
+
 function onReceivedGameplay(event){
     // Page-scoped ID of the bot user
     var senderId = event.sender.id; 
@@ -276,25 +277,17 @@ function addPlayerToCollection(senderID, playerID){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);  
     if(collection){
         var query = {sender_id: senderID};
-        collection.find(query).toArray(function(err, result) {
+        var player = { sender_id: senderID, player_id: playerID, last_datetime_send_push: moment(), is_can_get_limited_gift: false};
+        collection.update(query, player, {upsert: true}, function(err, res) {
             if(!err){
-                if(result.length == 0){
-                    var player = { sender_id: senderID, player_id: playerID, last_datetime_send_push: moment(), is_can_get_limited_gift: false };
-                    collection.insertOne(player, function(err, res) {
-                        if (!err){
-                            console.log("[" + moment().format('LLL') + "]" + " Added new player with sender id: " + senderID);
-                            sendMessageSubscribe(senderID, null);
-                        }                           
-                        else
-                            console.error(err);
-                    });
-                }
-                else{
-                    //console.log('Player already in database!');
-                    //sendMessageSubscribe(senderID, null);
-                }
+                if(res.result.nModified == 0){
+                     console.log("[" + moment().format('LLL') + "]" + " Added new player with sender id: " + senderID);
+                    sendMessageSubscribe(senderID, null);       
+                }        
             }
-        }); 
+            else
+                console.error("Error addPlayerToCollection");
+        });
     }
 };
 
