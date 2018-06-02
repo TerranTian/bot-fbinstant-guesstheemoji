@@ -49,8 +49,8 @@ MongoClient.connect(MONGODB_URL, function(err, client) {
         MongoDB = client.db(DB_NAME);
 
         //Run checking every 1 hours
-        //setInterval(checkAndSendMessageForAllPlayers, 1800000);
-        checkAndSendMessageForAllPlayers();
+        setInterval(checkAndSendMessageForAllPlayers, 1800000);
+        //checkAndSendMessageForAllPlayers();
     }
     else{
         console.error(err);
@@ -301,7 +301,6 @@ function checkAndSendMessageForAllPlayers(){
             var curDateTime = moment();
             var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
             counterPlayers = counterPlayers + 1;
-            console.log("->" + counterPlayers);
             //>= 12 hours
             if((diff + 1) >= 1440){
                 sendMessageWithLimitedGift(doc.sender_id, null);
