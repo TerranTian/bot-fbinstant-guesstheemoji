@@ -28,6 +28,8 @@ var arrMessageReminders = [
 },
 ];
 
+var counterPlayers = 0;
+
 const
     moment = require('moment'),
     mongo = require('mongodb'),
@@ -294,16 +296,18 @@ function addPlayerToCollection(senderID, playerID){
 function checkAndSendMessageForAllPlayers(){
     var collection = MongoDB.collection(PLAYERS_COLLECTION_NAME);
     if(collection){
+        counterPlayers = 0;
         collection.find().forEach(function(doc){
             var curDateTime = moment();
             var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
+            counterPlayers = counterPlayers + 1;
             //>= 12 hours
             if((diff + 1) >= 1440){
                 sendMessageWithLimitedGift(doc.sender_id, null);
                 collection.update({_id: doc._id}, {$set: {last_datetime_send_push: curDateTime, is_can_get_limited_gift: true}});  
             }                
         });
-        console.log("[" + moment().format('LLL') + "]" + " Check and send message to all players!");
+        console.log("[" + moment().format('LLL') + "]" + " Check and send message to " + counterPlayers + " players!");
     }
 };
 
