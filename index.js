@@ -301,6 +301,7 @@ function checkAndSendMessageForAllPlayers(){
             var curDateTime = moment();
             var diff = curDateTime.diff(moment(doc.last_datetime_send_push), 'minute');
             counterPlayers = counterPlayers + 1;
+            console.log("->" + counterPlayers);
             //>= 12 hours
             if((diff + 1) >= 1440){
                 sendMessageWithLimitedGift(doc.sender_id, null);
