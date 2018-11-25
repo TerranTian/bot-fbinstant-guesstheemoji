@@ -1,14 +1,14 @@
 'use strict';
 
-const VERIFY_TOKEN = 'EAABfV8cX80ABAAg1lQCbhTiEhZCdTZAK9M5tkxLGcZAjFOw9ZBSatQ4HdHOQvNtn90AYvtQJhdM0llQ69yPga9EIlEfDGMUBUZBqlrnfzutTn6HIAIFJ7iSo9sFpuFrRZB8sYZBZBbrz0c3DBhrPHbA3OoGQhGYN9MmZCETS6lZBVMrQZDZD';
+const VERIFY_TOKEN = 'EAACZAZCc0eZAtEBAFOguYajItvsT40KyOKDxgrWnwyoBIJ3m1bFV79PT8Vqepr00hBUNijRyZBJBK2Gl9YitTtJr56ZC2ZCUNOSjup9XGJJq61m58CpMSG2QAiMAPqufrQsgm5oAyogwm6ilm5rYqyceqVZCamZCTtDz2DMlQKbhhYJNeEfZCiZB0f';
 const MONGODB_URL = 'mongodb://localhost:27017/';
 const DB_NAME = 'botDB';
 const PLAYERS_COLLECTION_NAME = 'playersCollection';
 
 var arrMessageReminders = [
 {
-    title: "😍 We miss you! 😍",
-    message: "Time to relax! 😏 Come back to play and solve some levels...🤘"
+    title: "😍 We miss you 😍",
+    message: "Time to relax! 😏 Come back to play and solve some levels! 🤘"
 },
 {
     title: "Time to relax...😍'",
@@ -20,7 +20,7 @@ var arrMessageReminders = [
 },
 {
     title: "Do you know? 🤗",
-    message: "More than 20% players can't reach level 100. Can you reach level 100? 😎"
+    message: "More than 20% players can't reach level 20. Can you reach level 20? 😎"
 },
 {
     title: "1400 levels waitting...😱",
@@ -235,7 +235,7 @@ function sendMessageWithLimitedGift(senderID, contextID){
     var title = '😱 Limited Gift 😱';
     var message = "Don't miss it! Enter game to claim " + valueBonusCoin + " coins! Only in 12 hours! 😎";
     var urlImg = 'https://image.ibb.co/kutuZS/1200_627_limited_gift.jpg'
-    var cta = 'Claim & Play Now';
+    var cta = 'Claim Now';
 
     sendMessage(senderID, contextID, title, message, urlImg, cta, { event: 'claim_coins' });
 };
@@ -253,7 +253,7 @@ function sendMessageReminderToPlay(senderID, contextID){
 
 function sendMessageSubscribe(senderID, contextID){
     var title = 'Nice to meet you! 👋';
-    var message = "I'm Bot! I'll notify you when have gifts or new updates! Have a nice day!";
+    var message = "I'm Bot! I'll notify you when have gifts or new updates!";
     var urlImg = 'https://image.ibb.co/k3TAW7/1200_627_reminder.jpg'
     var cta = 'Play Now';
 
@@ -283,7 +283,7 @@ function addPlayerToCollection(senderID, playerID){
         collection.update(query, player, {upsert: true}, function(err, res) {
             if(!err){
                 if(res.result.nModified == 0){
-                     console.log("[" + moment().format('LLL') + "]" + " Added new player with sender id: " + senderID);
+                    console.log("[" + moment().format('LLL') + "]" + " Added new player with sender id: " + senderID);
                     sendMessageSubscribe(senderID, null);       
                 }        
             }
@@ -310,10 +310,6 @@ function checkAndSendMessageForAllPlayers(){
         console.log("[" + moment().format('LLL') + "]" + " Check and send message to " + counterPlayers + " players!");
     }
 };
-
-function isPlayerCanGetLimitedReward(playerID){
-    
-}
 
 function randomItemArray(array){
     return array[Math.floor(Math.random() * array.length)];   
